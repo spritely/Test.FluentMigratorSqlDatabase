@@ -15,14 +15,14 @@ namespace Spritely.Test.FluentMigratorSqlDatabase.Test
         [Test]
         public void Create_creates_on_disk_database()
         {
-            using (var testDatabase = new TestDatabase("Test.mdf"))
-            {
-                testDatabase.Create();
+            var testDatabase = new TestDatabase("Create_creates_on_disk_database.mdf");
 
-                testDatabase.ExecuteCommand(
-                    c =>
-                    {
-                        c.CommandText = @"
+            testDatabase.Create();
+
+            testDatabase.ExecuteCommand(
+                c =>
+                {
+                    c.CommandText = @"
 create table Person
 (
     Id int,
@@ -32,20 +32,19 @@ create table Person
 
 insert into Person (Id, FirstName, LastName) values (1, 'George', 'Washington');
 insert into Person (Id, FirstName, LastName) values (2, 'John', 'Adams');";
-                        c.ExecuteNonQuery();
-                    });
+                    c.ExecuteNonQuery();
+                });
 
-                testDatabase.ExecuteCommand(
-                    c =>
+            testDatabase.ExecuteCommand(
+                c =>
+                {
+                    c.CommandText = "select Id, FirstName, LastName from Person where Id = 1";
+                    using (var dataReader = c.ExecuteReader())
                     {
-                        c.CommandText = "select Id, FirstName, LastName from Person where Id = 1";
-                        using (var dataReader = c.ExecuteReader())
-                        {
-                            dataReader.Read();
-                            Assert.AreEqual("George", dataReader.GetString(1));
-                        }
-                    });
-            }
+                        dataReader.Read();
+                        Assert.AreEqual("George", dataReader.GetString(1));
+                    }
+                });
         }
     }
 }
