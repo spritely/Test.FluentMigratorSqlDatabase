@@ -8,6 +8,9 @@ configuration:
   - Debug
   - Release
 
+services:
+  - mssql2014
+
 install:
   - set semantic_version=%APPVEYOR_BUILD_VERSION:~0,5%
   - echo Version - %semantic_version%

@@ -19,10 +19,10 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
     public class TestDatabase : IDisposable
     {
         private const string MasterConnectionString =
-            "Server=(local)\\SQL2012SP1;Integrated Security=true";
+            "Server=(local)\\Sql2014;Integrated Security=true";
 
         private const string InstanceConnectionStringFormat =
-            "Server=(local)\\SQL2012SP1;Integrated Security=true;Initial Catalog={0}";
+            "Server=(local)\\Sql2014;Integrated Security=true;Initial Catalog={0}";
 
         private const string CreateDatabaseCommandFormat = @"
 if db_id('{0}') is not null begin
