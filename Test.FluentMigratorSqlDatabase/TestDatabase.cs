@@ -19,10 +19,10 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
     public class TestDatabase : IDisposable
     {
         private const string MasterConnectionString =
-            "Server=(LocalDB)\\MSSQLLocalDB;Integrated Security=true";
+            "Server=(LocalDB)\\v11.0;Integrated Security=true;Persist Security Info=true;Encrypt=false";
 
         private const string InstanceConnectionStringFormat =
-            "Server=(LocalDB)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog={0}";
+            "Server=(LocalDB)\\v11.0;Integrated Security=true;Initial Catalog={0}";
 
         private const string CreateDatabaseCommandFormat = "create database {0} on primary (name={0}, filename='{1}')";
         private const string DropDatabaseCommandFormat = "alter database {0} set single_user with rollback immediate;drop database {0}";
