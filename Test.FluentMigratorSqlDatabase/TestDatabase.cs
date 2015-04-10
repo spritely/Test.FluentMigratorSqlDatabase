@@ -19,13 +19,22 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
     public class TestDatabase : IDisposable
     {
         private const string MasterConnectionString =
-            "Server=(LocalDB)\\v11.0;Integrated Security=true;Persist Security Info=true;Encrypt=false";
+            "Server=(local)\\Sql2014;Integrated Security=true";
 
         private const string InstanceConnectionStringFormat =
-            "Server=(LocalDB)\\v11.0;Integrated Security=true;Initial Catalog={0}";
+            "Server=(local)\\Sql2014;Integrated Security=true;Initial Catalog={0}";
 
-        private const string CreateDatabaseCommandFormat = "create database {0} on primary (name={0}, filename='{1}')";
-        private const string DropDatabaseCommandFormat = "alter database {0} set single_user with rollback immediate;drop database {0}";
+        private const string CreateDatabaseCommandFormat = @"
+if db_id('{0}') is not null begin
+    drop database [{0}];
+end
+create database [{0}];";
+
+        private const string DropDatabaseCommandFormat = @"
+if db_id('{0}') is not null begin
+    alter database [{0}] set single_user with rollback immediate;
+    drop database [{0}];
+end";
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TestDatabase" /> class.
@@ -71,8 +80,7 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
                 return string.Format(
                     CultureInfo.InvariantCulture,
                     CreateDatabaseCommandFormat,
-                    this.DatabaseName,
-                    this.DatabaseFilePath);
+                    this.DatabaseName);
             }
         }
 
@@ -92,24 +100,7 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = this.CreateDatabaseCommand;
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (SqlException ex)
-                    {
-                        if (ex.Message !=
-                            string.Format("Database '{0}' already exists. Choose a different database name.", this.DatabaseName))
-                        {
-                            throw;
-                        }
-
-                        // Last time the database didn't get disposed of, often because a test
-                        // didn't complete and Dispose wasn't properly called
-                        this.DropDatabase();
-
-                        command.ExecuteNonQuery();
-                    }
+                    command.ExecuteNonQuery();
                 }
             }
         }
