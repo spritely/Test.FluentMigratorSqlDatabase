@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Spritely.Test.FluentMigratorSqlDatabase</id>
+    <version>$version$</version>
+    <title>Spritely.Test.FluentMigratorSqlDatabase</title>
+    <authors>Victor Robinson</authors>
+    <owners>Victor Robinson</owners>
+    <language>en-US</language>
+    <licenseUrl>https://github.com/spritely/Test.FluentMigratorSqlDatabase/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/spritely/Test.FluentMigratorSqlDatabase</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Enables tests to general SQL databases using Fluent Migrator on the fly.</description>
+    <copyright>Copyright (C) 2015</copyright>
+    <tags>Spritely Fluent Migrator SQL Database test</tags>
+  </metadata>
+</package>
