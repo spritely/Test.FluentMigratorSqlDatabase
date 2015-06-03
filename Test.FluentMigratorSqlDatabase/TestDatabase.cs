@@ -10,13 +10,14 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
     using System;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
 
     /// <summary>
     ///     A local test database.
     /// </summary>
-    public class TestDatabase : IDisposable
+    public sealed class TestDatabase : IDisposable
     {
         private const string MasterConnectionString =
             "Server=(local)\\Sql2014;Integrated Security=true";
@@ -91,6 +92,8 @@ end";
         /// <summary>
         ///     Creates the database.
         /// </summary>
+        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities",
+            Justification = "This is a safe query as value is privately sourced.")]
         public void Create()
         {
             using (var connection = new SqlConnection(MasterConnectionString))
@@ -108,15 +111,20 @@ end";
         ///     Executes the given command against the database inside a newly opened connection which is closed and disposed of on
         ///     completion.
         /// </summary>
-        /// <param name="executeCommand">The execute command.</param>
-        public void ExecuteCommand(Action<IDbCommand> executeCommand)
+        /// <param name="command">The command to execute.</param>
+        public void ExecuteCommand(Action<IDbCommand> command)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException("command");
+            }
+
             using (var connection = new SqlConnection(this.ConnectionString))
             {
                 connection.Open();
-                using (var command = connection.CreateCommand())
+                using (var executeCommand = connection.CreateCommand())
                 {
-                    executeCommand(command);
+                    command(executeCommand);
                 }
             }
         }
@@ -129,6 +137,8 @@ end";
             this.DropDatabase();
         }
 
+        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities",
+            Justification = "This is a safe query as value is privately sourced.")]
         private void DropDatabase()
         {
             using (var connection = new SqlConnection(MasterConnectionString))

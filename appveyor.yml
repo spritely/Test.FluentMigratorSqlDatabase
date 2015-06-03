@@ -2,11 +2,17 @@
 # It is a continuously incrementing number so when used it violates the reset
 # smaller build parts rule of semantic versioning. Therefore we introduce a
 # second environment variable semantic_version.
-version: 0.1.0.{build}
+version: 0.2.0.{build}
+
+environment:
+  RunCodeAnalysis: true
 
 configuration:
   - Debug
   - Release
+
+cache:
+  - packages -> **\packages.config
 
 services:
   - mssql2014
@@ -27,9 +33,13 @@ assembly_info:
   assembly_informational_version: '$(semantic_version)'
 
 build:
-  publish_nuget: true
+  project: Build.proj
   parallel: true
   verbosity: normal
+
+after_test:
+  - nuget pack "%APPVEYOR_BUILD_FOLDER%\Test.FluentMigratorSqlDatabase\Test.FluentMigratorSqlDatabase.nuspec" -BasePath "%APPVEYOR_BUILD_FOLDER%\Test.FluentMigratorSqlDatabase\bin\%configuration%" -Properties "Configuration=%configuration%;Platform=%platform%;Version=%semantic_version%" -OutputDirectory "%TEMP%" -Verbosity detailed
+  - appveyor PushArtifact "%TEMP%\Spritely.Test.FluentMigratorSqlDatabase.%semantic_version%.nupkg"
 
 deploy:
   - provider: NuGet

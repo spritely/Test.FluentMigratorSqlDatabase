@@ -13,5 +13,15 @@
     <description>Enables tests to general SQL databases using Fluent Migrator on the fly.</description>
     <copyright>Copyright (C) 2015</copyright>
     <tags>Spritely Fluent Migrator SQL Database test</tags>
+    <dependencies>
+      <group targetFramework="net450">
+        <dependency id="FluentMigrator" version="1.5.1" />
+        <dependency id="FluentMigrator.Runner" version="1.5.1" />
+      </group>
+    </dependencies>
   </metadata>
+  <files>
+    <file src="Spritely.Test.FluentMigratorSqlDatabase.dll" target="lib\net45" />
+    <file src="Spritely.Test.FluentMigratorSqlDatabase.pdb" target="lib\net45" />
+  </files>
 </package>

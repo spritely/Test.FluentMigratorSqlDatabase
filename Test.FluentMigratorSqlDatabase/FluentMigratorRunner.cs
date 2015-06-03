@@ -9,6 +9,7 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
     using FluentMigrator;
     using FluentMigrator.Runner;
@@ -19,7 +20,7 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
     /// <summary>
     ///     Factory for creating Fluent Migrator MigrationRunner instances.
     /// </summary>
-    public class FluentMigratorRunnerFactory
+    public static class FluentMigratorRunnerFactory
     {
         /// <summary>
         ///     Creates a migration runner for the specified migration assembly against the given connection string.
@@ -61,8 +62,12 @@ namespace Spritely.Test.FluentMigratorSqlDatabase
         {
             public bool PreviewOnly { get; set; }
 
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
+                Justification = "This is used to get auto-property behavior")]
             public string ProviderSwitches { get; set; }
 
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
+                Justification = "This is used to get auto-property behavior")]
             public int Timeout { get; set; }
         }
     }
