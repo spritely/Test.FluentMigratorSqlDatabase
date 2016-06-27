@@ -15,8 +15,7 @@
     <tags>Spritely Fluent Migrator SQL Database test</tags>
     <dependencies>
       <group targetFramework="net450">
-        <dependency id="FluentMigrator" version="1.5.1" />
-        <dependency id="FluentMigrator.Runner" version="1.5.1" />
+        <dependency id="FluentMigrator.Runner" version="1.6.2" />
       </group>
     </dependencies>
   </metadata>
